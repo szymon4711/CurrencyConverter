@@ -5,27 +5,38 @@ import java.awt.*;
 import java.io.IOException;
 
 public class MainGui {
-    private JTextField gbpTextField;
     private JPanel mainPanel;
+    private JTextField curTextField;
     private JTextField plnTextField;
     private JLabel plnLabel;
-    private JLabel gbpLabel;
+    private JLabel curLabel;
+    private JLabel label;
 
 
     public MainGui() {
-        DocumentListenerImp documentListenerGbp = new DocumentListenerImp(gbpTextField, "GBP");
-        DocumentListenerImp documentListenerPln = new DocumentListenerImp(plnTextField, "PLN");
-        documentListenerGbp.setOtherDocumentListener(documentListenerPln);
-        documentListenerPln.setOtherDocumentListener(documentListenerGbp);
+        String currencyCode = "EUR";
+        RateProvider rateProvider = new RateProvider(currencyCode);
+
+        DocumentListenerImp documentListenerCur = new DocumentListenerImp(curTextField, currencyCode, rateProvider);
+        DocumentListenerImp documentListenerPln = new DocumentListenerImp(plnTextField, "PLN", rateProvider);
+        documentListenerCur.setOtherDocumentListener(documentListenerPln);
+        documentListenerPln.setOtherDocumentListener(documentListenerCur);
+        curTextField.getDocument().addDocumentListener(documentListenerCur);
+        plnTextField.getDocument().addDocumentListener(documentListenerPln);
 
         ImageProvider imageProvider = new ImageProvider();
-        Image image = imageProvider.getImage(documentListenerGbp);
-        Image plnImage = imageProvider.getImage(documentListenerPln);
+        try {
+            Image image = imageProvider.getImage(documentListenerCur);
+            Image plnImage = imageProvider.getImage(documentListenerPln);
+            curLabel.setIcon(new ImageIcon(image));
+            plnLabel.setIcon(new ImageIcon(plnImage));
+        } catch (IOException | NullPointerException e) {
+            curLabel.setText(currencyCode);
+            plnLabel.setText("PLN");
+        }
 
-        gbpLabel.setIcon(new ImageIcon(image));
-        plnLabel.setIcon(new ImageIcon(plnImage));
-        gbpTextField.getDocument().addDocumentListener(documentListenerGbp);
-        plnTextField.getDocument().addDocumentListener(documentListenerPln);
+        label.setText("1 " + documentListenerCur.getMoney().getCurrency().getCurrencyCode()
+                + " = " + documentListenerCur.getMoney().getRateProvider().getPlnToCurrencyRate() + " PLN");
     }
 
     public static void main(String[] args) {
@@ -36,5 +47,4 @@ public class MainGui {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
 }
