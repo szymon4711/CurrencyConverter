@@ -8,12 +8,12 @@ import java.math.BigDecimal;
 public class DocumentListenerImp implements DocumentListener {
 
     private final JTextField textField;
-    private DocumentListenerImp otherDocumentListener;
     private final Money money;
+    private DocumentListenerImp otherDocumentListener;
 
-    public DocumentListenerImp(JTextField textField, String currencyCode) {
+    public DocumentListenerImp(JTextField textField, String currencyCode, RateProvider rateProvider) {
         this.textField = textField;
-        this.money = new Money("0.00", currencyCode);
+        this.money = new Money("0.00", currencyCode , rateProvider);
     }
 
     public void setOtherDocumentListener(DocumentListenerImp otherDocumentListener) {
@@ -22,10 +22,6 @@ public class DocumentListenerImp implements DocumentListener {
 
     public Money getMoney() {
         return money;
-    }
-
-    public JTextField getTextField() {
-        return textField;
     }
 
     private void calculateExchange() {
@@ -37,7 +33,7 @@ public class DocumentListenerImp implements DocumentListener {
         }
         otherDocumentListener.textField.getDocument().removeDocumentListener(otherDocumentListener);
         money.setAmount(new BigDecimal(textField.getText()));
-        otherDocumentListener.getMoney().setAmount(money.convertCurrencyTo(otherDocumentListener.getMoney()));
+        otherDocumentListener.getMoney().convertCurrencyFrom(money);
         otherDocumentListener.textField.setText(otherDocumentListener.getMoney().getAmount().toString());
         otherDocumentListener.textField.getDocument().addDocumentListener(otherDocumentListener);
     }

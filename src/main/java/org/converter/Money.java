@@ -6,34 +6,40 @@ import java.util.Currency;
 
 public class Money{
     private BigDecimal amount;
-    private Currency currency;
+    private final Currency currency;
     private final RateProvider rateProvider;
-    public Money(String amount, String currency) {
+    public Money(String amount, String currency, RateProvider rateProvider) {
         this.amount = new BigDecimal(amount);
         this.currency = Currency.getInstance(currency);
-        this.rateProvider = new RateProvider();
+        this.rateProvider = rateProvider;
     }
 
-    public BigDecimal convertCurrencyTo(Money moneyToConvert) {
+
+
+
+    public void convertCurrencyFrom(Money moneyToConvert) {
         if (moneyToConvert.currency.getCurrencyCode().equals("PLN"))
-            return amount.multiply(rateProvider.getPlnToCurrencyRate()).setScale(moneyToConvert.currency.getDefaultFractionDigits(), RoundingMode.HALF_EVEN);
-        return amount.divide(rateProvider.getPlnToCurrencyRate(), RoundingMode.HALF_EVEN).setScale(moneyToConvert.currency.getDefaultFractionDigits(), RoundingMode.HALF_EVEN);
+            amount = moneyToConvert.amount.divide(rateProvider.getPlnToCurrencyRate(), RoundingMode.HALF_EVEN)
+                .setScale(moneyToConvert.currency.getDefaultFractionDigits(), RoundingMode.HALF_EVEN);
+        else
+            amount = moneyToConvert.amount.multiply(rateProvider.getPlnToCurrencyRate())
+                .setScale(moneyToConvert.currency.getDefaultFractionDigits(), RoundingMode.HALF_EVEN);
     }
-
 
     public BigDecimal getAmount() {
         return amount;
     }
 
     public void setAmount(BigDecimal amount) {
-        this.amount = amount.setScale(currency.getDefaultFractionDigits(), RoundingMode.HALF_EVEN);
+        this.amount = amount
+                .setScale(currency.getDefaultFractionDigits(), RoundingMode.HALF_EVEN);
     }
 
     public Currency getCurrency() {
         return currency;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+    public RateProvider getRateProvider() {
+        return rateProvider;
     }
 }
