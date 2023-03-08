@@ -1,5 +1,7 @@
 package org.converter;
 
+import org.converter.models.Money;
+import org.converter.models.RateProvider;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package org.converter;
+package org.converter.models;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

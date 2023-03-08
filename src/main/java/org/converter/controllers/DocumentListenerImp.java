@@ -1,4 +1,7 @@
-package org.converter;
+package org.converter.controllers;
+
+import org.converter.models.Money;
+import org.converter.models.RateProvider;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;

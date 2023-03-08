@@ -1,4 +1,4 @@
-package org.converter;
+package org.converter.models;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

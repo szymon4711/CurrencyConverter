@@ -1,4 +1,6 @@
-package org.converter;
+package org.converter.models;
+
+import org.converter.controllers.DocumentListenerImp;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

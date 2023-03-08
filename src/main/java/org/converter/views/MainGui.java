@@ -1,4 +1,8 @@
-package org.converter;
+package org.converter.views;
+
+import org.converter.controllers.DocumentListenerImp;
+import org.converter.models.ImageProvider;
+import org.converter.models.RateProvider;
 
 import javax.swing.*;
 import java.awt.*;
