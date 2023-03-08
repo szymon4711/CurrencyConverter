@@ -13,9 +13,13 @@ public class MainGui {
     private JLabel label;
 
 
-    public MainGui() {
-        String currencyCode = "EUR";
-        RateProvider rateProvider = new RateProvider(currencyCode);
+    public MainGui(String[] currencyCodeArgs) {
+        String currencyCode;
+        if (currencyCodeArgs.length == 0)
+            currencyCode = "GBP";
+        else
+            currencyCode = currencyCodeArgs[0];
+        RateProvider rateProvider = new RateProvider(currencyCode.toUpperCase());
 
         DocumentListenerImp documentListenerCur = new DocumentListenerImp(curTextField, currencyCode, rateProvider);
         DocumentListenerImp documentListenerPln = new DocumentListenerImp(plnTextField, "PLN", rateProvider);
@@ -41,7 +45,7 @@ public class MainGui {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("CurrencyConverter");
-        frame.setContentPane(new MainGui().mainPanel);
+        frame.setContentPane(new MainGui(args).mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 300);
         frame.setLocationRelativeTo(null);
